@@ -1,0 +1,26 @@
+apiVersion: lyra.dev/v3
+kind: SourceBundle
+name: mentat-learn
+version: 0.1.0
+description: Self-improving personal assistant — four-layer memory + dialectic user model + multi-channel gateway + closed skill-extraction loop.
+dual_use: false
+smoke_eval_threshold: 0.95
+persona: persona.md
+skills: skills/
+tools:
+  - kind: native
+    name: mentat_recall
+  - kind: native
+    name: mentat_dialectic
+  - kind: mcp
+    name: mentat_skill_extractor
+    server: stdio:./tools/mcp_server.py
+memory:
+  seed: memory/seed.md
+evals:
+  golden: evals/golden.jsonl
+  rubric: evals/rubric.md
+verifier:
+  domain: personal-assistant
+  command: python verifier/checker.py
+  budget_seconds: 60

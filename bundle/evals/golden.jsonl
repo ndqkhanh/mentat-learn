@@ -1,0 +1,12 @@
+{"id": "mentat-001", "channel": "slack", "user": "alice", "intent": "travel-planning", "expected_pass": true}
+{"id": "mentat-002", "channel": "whatsapp", "user": "alice", "intent": "code-review", "expected_pass": true}
+{"id": "mentat-003", "channel": "email", "user": "alice", "intent": "meeting-summary", "expected_pass": true}
+{"id": "mentat-004", "channel": "telegram", "user": "alice", "intent": "expense-report", "expected_pass": true}
+{"id": "mentat-005", "user": "alice", "memory_op": "semantic-write", "fact": "vegan", "expected_pass": true}
+{"id": "mentat-006", "user": "alice", "memory_op": "semantic-write", "fact": "no-meetings-friday", "expected_pass": true}
+{"id": "mentat-007", "user": "alice", "pattern_repeat_count": 3, "expected_promotion": true, "expected_pass": true}
+{"id": "mentat-008", "user": "alice", "pattern_repeat_count": 1, "expected_promotion": false, "expected_pass": true}
+{"id": "mentat-009", "channel": "slack", "user": "alice", "raw_text": "my SSN is 123-45-6789", "expected_redacted": true, "expected_pass": true}
+{"id": "mentat-010", "user": "alice", "cross_user_read_attempt": "bob", "expected_blocked": "LBL-MENTAT-USER-ATTR", "expected_pass": true}
+{"id": "mentat-011", "user": "alice", "channel": "email", "outbound_canonical": true, "expected_pass": true}
+{"id": "mentat-012", "user": "alice", "demote_after_days": 8, "low_confidence": true, "expected_demoted": true, "expected_pass": true}

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mentat-Learn — Self-Improving Personal Assistant</title>
+<style>
+  :root { --bg:#0b1020; --fg:#e6ecff; --muted:#8aa0c8; --accent:#a8d8ff; --accent-2:#ffc4a8; --border:#1b2542; --card:#131d36; --badge:#213060; }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Inter","Helvetica Neue",sans-serif;line-height:1.55}
+  a{color:var(--accent)}a:hover{text-decoration:underline}
+  header{padding:48px 32px 32px;border-bottom:1px solid var(--border);background:linear-gradient(160deg,#0b1020 0%,#13253f 80%)}
+  header h1{font-size:2.2rem;margin:0 0 8px}
+  header h2{font-size:1.05rem;font-weight:400;color:var(--muted);margin:0 0 16px}
+  .badges span{background:var(--badge);color:var(--accent-2);padding:4px 10px;border-radius:12px;font-size:.78rem;margin-right:8px;display:inline-block;margin-bottom:6px}
+  nav.tabs{display:flex;gap:4px;flex-wrap:wrap;padding:0 32px;border-bottom:1px solid var(--border);background:#0d142a;position:sticky;top:0;z-index:5}
+  nav.tabs button{background:transparent;border:0;color:var(--muted);padding:14px 18px;cursor:pointer;font-size:.92rem;border-bottom:2px solid transparent}
+  nav.tabs button.active{color:var(--fg);border-bottom-color:var(--accent)}
+  main{max-width:1100px;margin:0 auto;padding:36px 32px 80px}
+  section.pane{display:none}section.pane.active{display:block}
+  h3{margin-top:36px;font-size:1.3rem}h4{margin-top:28px;font-size:1.05rem;color:var(--accent-2)}
+  table{border-collapse:collapse;width:100%;margin:12px 0 24px;font-size:.92rem}
+  th,td{border-bottom:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:500}
+  code{background:var(--card);padding:2px 6px;border-radius:4px;font-size:.88rem}
+  pre{background:var(--card);border:1px solid var(--border);padding:12px 16px;border-radius:6px;overflow-x:auto;font-size:.85rem;line-height:1.45}
+  ul{padding-left:20px}li{margin:6px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:14px 0}
+  .card{background:var(--card);border:1px solid var(--border);padding:14px 16px;border-radius:8px}
+  .card h5{margin:0 0 6px;font-size:.98rem;color:var(--accent)}
+  .card p{margin:0;color:var(--muted);font-size:.88rem}
+  .hero-target{background:var(--card);border-left:3px solid var(--accent);padding:14px 18px;border-radius:4px;margin:14px 0;font-size:.95rem}
+  footer{color:var(--muted);font-size:.85rem;border-top:1px solid var(--border);padding:24px 32px;margin-top:40px}
+</style>
+</head>
+<body>
+<header>
+  <div class="badges"><span>Personal Assistant</span><span>Design-only · April 2026</span><span>OpenClaw × SemaClaw × Hermes</span></div>
+  <h1>Mentat-Learn</h1>
+  <h2>A self-improving personal assistant — one persona across every channel, a skill library that actually grows.</h2>
+  <div class="hero-target">
+    <b>Design target:</b> cross-session productivity gain — mean steps / token cost for a given workflow drops ≥ <b>30 %</b> from turn N to turn N+20 — through skill extraction and cache-aware skill loading. Zero token-bill inflation as the library grows.
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="overview">Overview</button>
+  <button class="tab-btn" data-tab="baselines">Honest Baselines</button>
+  <button class="tab-btn" data-tab="novel">Novel Contributions</button>
+  <button class="tab-btn" data-tab="arch">Architecture</button>
+  <button class="tab-btn" data-tab="blocks">Blocks</button>
+  <button class="tab-btn" data-tab="why">Why this stack</button>
+  <button class="tab-btn" data-tab="refs">References</button>
+</nav>
+
+<main>
+
+<section id="overview" class="pane active">
+  <h3>What Mentat-Learn is</h3>
+  <p>Your personal agent, coherent across every channel — Slack, iMessage, WhatsApp, Telegram, Signal, email, web — backed by a closed skill-learning loop. After you finish a task, Mentat extracts a reusable procedure, writes it as a SKILL.md, refines it on every reuse, and compresses co-occurring skills into higher-order composites. Memory is opt-in and per-channel; you can say "forget that" at any moment.</p>
+  <div class="grid">
+    <div class="card"><h5>Niche</h5><p>One-user or household personal assistant; cross-channel continuity; gets better through use.</p></div>
+    <div class="card"><h5>Not</h5><p>Workplace bot (Syndicate); voice-first (Harmony-Voice); ops automation (Aegis-Ops).</p></div>
+    <div class="card"><h5>Status</h5><p>Design specification. Not implemented.</p></div>
+  </div>
+
+  <h4>Files in this folder</h4>
+  <ul>
+    <li><a href="architecture.md">architecture.md</a></li>
+    <li><a href="architecture-tradeoff.md">architecture-tradeoff.md</a></li>
+    <li><a href="system-design.md">system-design.md</a></li>
+    <li><a href="blocks/">blocks/</a></li>
+  </ul>
+</section>
+
+<section id="baselines" class="pane">
+  <h3>Honest baselines</h3>
+  <table>
+    <tr><th>Baseline</th><th>Shape</th><th>Source</th></tr>
+    <tr><td>OpenClaw (~196k ★ April 2026)</td><td>Multi-channel gateway, SKILL.md — but no auto-skill-extraction across sessions</td><td><a href="../../docs/52-dive-into-open-claw.md">docs/52</a></td></tr>
+    <tr><td>Hermes Agent (Nous Research)</td><td>Closed skill-learning loop; self-eval every 15 tasks; cache-aware skill loading</td><td><a href="../../docs/55-hermes-agent-self-improving.md">docs/55</a></td></tr>
+    <tr><td>SemaClaw (Midea AIRC, arXiv:2604.11548)</td><td>DAG two-phase hybrid; PermissionBridge; SOUL.md persona partition</td><td><a href="../../docs/54-semaclaw-general-purpose-agent.md">docs/54</a></td></tr>
+    <tr><td>Voyager (Minecraft)</td><td>Skill library with curriculum + verification</td><td><a href="../../docs/19-voyager-skill-libraries.md">docs/19</a></td></tr>
+  </table>
+</section>
+
+<section id="novel" class="pane">
+  <h3>Novel contributions</h3>
+  <div class="card"><h5>1. Three-way composition: SOUL.md × Hermes × Honcho</h5><p>Persona anchor (who the agent is) × skill extractor (what it can do) × dialectic user modeling (who the user is to the agent). Each novel alone; the three-way fusion is genuinely new.</p></div>
+  <div class="card"><h5>2. Skill compression</h5><p>Co-occurring skills → higher-order composite; base skills preserved as callable but "subsumed". Extends Voyager's skill library idea with a novel compression operator.</p></div>
+  <div class="card"><h5>3. Cache-aware skill loading</h5><p>Skills loaded JIT via description match; token bill flat as library grows. Applies Hermes's cache discipline.</p></div>
+  <div class="card"><h5>4. Autogenesis-versioned skill artifacts</h5><p>Each skill revision is a versioned patch with rollback-on-regression, per the <a href="../../docs/36-autogenesis-self-evolving-agents.md">Autogenesis protocol</a>.</p></div>
+  <div class="card"><h5>5. Natural-Language Agent Harness (NLAH) slot</h5><p>Advanced users can supply a <code>HARNESS.md</code> natural-language spec (<a href="https://arxiv.org/abs/2603.25723">arXiv:2603.25723</a>) executed by an Intelligent Harness Runtime — per-user harness personalization without forking.</p></div>
+</section>
+
+<section id="arch" class="pane">
+  <h3>Architecture at a glance</h3>
+  <pre>Slack / iMessage / WhatsApp / Telegram / Email / Web
+                       │
+                       ▼
+              [Unified Gateway]
+                       │
+                       ▼
+              [Agent Loop]
+           ┌───────┼────────────┐
+           ▼       ▼            ▼
+    Skill Lib  Four-Layer   Tool Layer + MCP
+                 Memory
+                                │
+                                ▼
+                       [Skill Extractor]
+  ↕ Cron scheduler · session persist · privacy scope · self-eval · SOUL.md · Autogenesis</pre>
+</section>
+
+<section id="blocks" class="pane">
+  <h3>Ten blocks</h3>
+  <ol>
+    <li><a href="blocks/01-gateway.md">01 Unified Gateway</a></li>
+    <li><a href="blocks/02-agent-loop.md">02 Agent Loop</a></li>
+    <li><a href="blocks/03-four-layer-memory.md">03 Four-Layer Memory</a></li>
+    <li><a href="blocks/04-skill-extractor-loop.md">04 Skill Extractor Loop</a></li>
+    <li><a href="blocks/05-skill-library.md">05 Skill Library</a></li>
+    <li><a href="blocks/06-cron-scheduler.md">06 Cron Scheduler</a></li>
+    <li><a href="blocks/07-session-persistence.md">07 Session Persistence</a></li>
+    <li><a href="blocks/08-privacy-scope.md">08 Privacy Scope</a></li>
+    <li><a href="blocks/09-dialectic-user-modeling.md">09 Dialectic User Modeling (Honcho)</a></li>
+    <li><a href="blocks/10-self-eval.md">10 Self-Eval Every 15 Tasks</a></li>
+  </ol>
+</section>
+
+<section id="why" class="pane">
+  <h3>Why this stack</h3>
+  <h4>Why a four-layer memory?</h4>
+  <p>Three layers (procedural / facts / session) is what Hermes defaults to. Adding a fourth — the <b>dialectic</b> — captures the relationship between user and agent over time. Personal agents live or die by feeling personal; facts alone don't deliver that.</p>
+  <h4>Why skill compression?</h4>
+  <p>Skill libraries become discoverability problems past ~100 skills. Co-occurring skills being promoted to composites keeps the discovery surface small without losing the base skills (they remain callable).</p>
+  <h4>Why SOUL.md?</h4>
+  <p>Persona drift over months is a real failure. An immutable partition that the context engine can't compact away is the cheapest control. SemaClaw proved the pattern works.</p>
+  <h4>Why self-eval every 15 tasks?</h4>
+  <p>Continuous eval is expensive; per-task eval ignores slow drift. 15-task cadence is Hermes's sweet spot; good enough to catch drift early without burning budget.</p>
+</section>
+
+<section id="refs" class="pane">
+  <h3>Primary references</h3>
+  <ul>
+    <li><a href="../../docs/52-dive-into-open-claw.md">docs/52 — Dive into OpenClaw</a></li>
+    <li><a href="../../docs/54-semaclaw-general-purpose-agent.md">docs/54 — SemaClaw</a></li>
+    <li><a href="../../docs/55-hermes-agent-self-improving.md">docs/55 — Hermes Agent</a></li>
+    <li><a href="../../docs/19-voyager-skill-libraries.md">docs/19 — Voyager skill libraries</a></li>
+    <li><a href="../../docs/47-adaptation-of-agentic-ai-survey.md">docs/47 — Adaptation of Agentic AI survey</a></li>
+    <li><a href="../../docs/36-autogenesis-self-evolving-agents.md">docs/36 — Autogenesis self-evolving agents</a></li>
+    <li><a href="../../docs/04-skills.md">docs/04 — Skills</a></li>
+    <li><a href="../../docs/09-memory-files.md">docs/09 — Memory files</a></li>
+    <li><a href="../../docs/08-context-compaction.md">docs/08 — Context compaction</a></li>
+    <li>NLAH — <a href="https://arxiv.org/abs/2603.25723">arXiv:2603.25723</a></li>
+  </ul>
+</section>
+
+</main>
+<footer>Design specification. Not implemented. Part of the <a href="..">harness-engineering projects</a> index.</footer>
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(btn.dataset.tab).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}));
+</script>
+</body>
+</html>
